@@ -5,17 +5,17 @@
   "main": "./pact.js",
   "types": "./pact.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run lint && npm run compile",
+    "compile": "tsc",
     "clean": "rimraf docs dist dist-web coverage .nyc_output logs pacts jscpd.json",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "deploy:prepare": "./scripts/create_npmrc_file.sh",
-    "dist": "npm run build && webpack --config ./config/webpack.web.config.js",
+    "dist": "npm run compile && webpack --config ./config/webpack.web.config.js",
     "jscpd": "jscpd -p src -r json -o jscpd.json",
     "lint": "standard && tslint -c tslint.json 'src/**/*.ts'",
     "postdist": "npm t",
     "posttest": "npm run test:karma",
     "predist": "npm run clean && npm run lint && npm run jscpd",
-    "prerelease": "npm i && rm package-lock.json",
     "release": "standard-version",
     "test": "nyc --check-coverage --reporter=html --reporter=text-summary mocha",
     "test:examples": "npm run test:e2e-examples && npm run test:jest-examples && npm run test:mocha-examples && npm run test:ava-examples",
@@ -44,7 +44,7 @@
     "testing",
     "consumer driven testing"
   ],
-  "author": "Beth Skurrie <beth@bethesque.com> (https://github.com/bethesque)",
+  "author": "Matt Fellows <m@onegeek.com.au> (http://twitter.com/matthewfellows)",
   "contributors": [
     {
       "name": "Tarcio Saraiva",
@@ -52,14 +52,14 @@
       "url": "http://twitter.com/tarciosaraiva"
     },
     {
-      "name": "Matt Fellows",
-      "email": "m@onegeek.com.au",
-      "url": "http://twitter.com/matthewfellows"
-    },
-    {
       "name": "Michel Boudreau",
       "email": "michelboudreau@gmail.com",
       "url": "http://codinghitchhiker.com"
+    },
+    {
+      "name": "Beth Skurrie",
+      "email": "beth@bethesque.com",
+      "url": "https://github.com/bethesque"
     }
   ],
   "license": "MIT",
@@ -80,12 +80,14 @@
   "dependencies": {
     "@pact-foundation/pact-node": "^6.7.3",
     "cli-color": "^1.1.0",
+    "es6-object-assign": "^1.1.0",
     "es6-promise": "^4.1.1",
     "lodash": "^4.17.4",
     "lodash.isfunction": "3.0.8",
     "lodash.isnil": "4.0.0",
     "lodash.isundefined": "3.0.1",
-    "lodash.omitby": "4.6.0"
+    "lodash.omitby": "4.6.0",
+    "popsicle": "^9.2.0"
   },
   "devDependencies": {
     "@pact-foundation/karma-pact": "2.x.x",
@@ -93,15 +95,17 @@
     "@types/chai": "^4.0.3",
     "@types/chai-as-promised": "0.0.31",
     "@types/cli-color": "^0.3.29",
+    "@types/form-data": "^2.2.1",
     "@types/lodash": "^4.14.73",
     "@types/lodash.isnil": "^4.0.3",
     "@types/mocha": "^2.2.41",
+    "@types/nock": "^9.1.2",
     "@types/node": "^8.0.24",
     "@types/proxyquire": "^1.3.27",
     "@types/q": "^1.0.6",
-    "@types/request": "^2.0.8",
     "@types/sinon": "^2.3.3",
     "@types/sinon-chai": "^2.7.29",
+    "@types/tough-cookie": "^2.3.2",
     "@types/underscore": "^1.8.5",
     "awesome-typescript-loader": "^3.2.3",
     "babel-cli": "6.x",
@@ -126,7 +130,7 @@
     "loader-utils": "^1.1.0",
     "mocha": "3.x",
     "mocha-lcov-reporter": "^1.3.0",
-    "nock": "8.x",
+    "nock": "^8.2.2",
     "nyc": "^11.2.0",
     "proxyquire": "1.x",
     "rimraf": "2.x",
